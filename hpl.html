@@ -2208,8 +2208,8 @@ async function addPlayer(){
   if(!n){toast('Player name required!','er');return;}
   if(!tid){toast('Select a team!','er');return;}
   toast('Saving...','inf');
-  if(cap==='captain'){var pv=P.find(function(p){return p.teamId===tid&&p.captainRole==='captain';});if(pv)await sbUpdate('players',pv.id,{captain_role:''});}
-  if(cap==='vc'){var pv=P.find(function(p){return p.teamId===tid&&p.captainRole==='vc';});if(pv)await sbUpdate('players',pv.id,{captain_role:''});}
+  if(cap==='captain'){var pvC=P.find(function(p){return p.teamId===tid&&p.captainRole==='captain';});if(pvC)await sbUpdate('players',pvC.id,{captain_role:''});}
+  if(cap==='vc'){var pvV=P.find(function(p){return p.teamId===tid&&p.captainRole==='vc';});if(pvV)await sbUpdate('players',pvV.id,{captain_role:''});}
   var row=await sbInsert('players',{name:n,team_id:tid,role:r,num:j||null,photo:ph||null,batting:bat,bowling:bow||null,captain_role:cap||null});
   if(row&&row.id){
     var fresh=await sbGet('players');P=fresh.map(mapPlayer);
@@ -2278,8 +2278,8 @@ async function saveEditPlayer(){
   if(!n){toast('Name required!','er');return;}
   if(!tid){toast('Select a team!','er');return;}
   toast('Saving...','inf');
-  if(cap==='captain'){var pv=P.find(function(x){return x.id!==id&&x.teamId===tid&&x.captainRole==='captain';});if(pv)await sbUpdate('players',pv.id,{captain_role:''});}
-  if(cap==='vc'){var pv=P.find(function(x){return x.id!==id&&x.teamId===tid&&x.captainRole==='vc';});if(pv)await sbUpdate('players',pv.id,{captain_role:''});}
+  if(cap==='captain'){var pvC2=P.find(function(x){return x.id!==id&&x.teamId===tid&&x.captainRole==='captain';});if(pvC2)await sbUpdate('players',pvC2.id,{captain_role:''});}
+  if(cap==='vc'){var pvV2=P.find(function(x){return x.id!==id&&x.teamId===tid&&x.captainRole==='vc';});if(pvV2)await sbUpdate('players',pvV2.id,{captain_role:''});}
   var row=await sbUpdate('players',id,{name:n,team_id:tid,num:$$('ep-num').value||null,role:$$('ep-role').value,batting:$$('ep-bat').value,bowling:$$('ep-bowl').value||null,captain_role:cap||null,photo:$$('ep-photo').value.trim()||null});
   if(row&&row.id){var fresh=await sbGet('players');P=fresh.map(mapPlayer);renderTeams();updateStats();rML_P();closeModal('edit-player-modal');toast(n+' updated! ✅','ok');}
   else toast('Error!','er');
@@ -2378,7 +2378,7 @@ async function delNotice(id){
 // ADMIN LISTS
 // ════════════════════════════════════════
 function renderAdminLists(){rML_T();rML_P();rML_M();rML_N();rML_G();}
-function rML_G(){var el=$$('mlg');if(!el)return;if(!G.length){el.innerHTML='<div class="ea"><div class="ea-ico">🖼️</div><div class="ea-t">No gallery photos</div></div>';return;}el.innerHTML=G.map(function(g){return'<div class="mi"><div class="ml-av" style="overflow:hidden"><img src="'+g.url+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px" onerror="this.style.display='none'"></div><div class="ml-info"><div class="ml-name">'+g.cap+'</div><div class="ml-sub">'+(g.big?'Full Width':'Normal')+'</div></div><button class="edit-btn" onclick="openEditGallery('+g.id+')">✏️</button><button class="del-btn" onclick="delGallery('+g.id+')">🗑</button></div>';}).join('');}
+function rML_G(){var el=$$('mlg');if(!el)return;if(!G.length){el.innerHTML='<div class="ea"><div class="ea-ico">🖼️</div><div class="ea-t">No gallery photos</div></div>';return;}el.innerHTML=G.map(function(g){return'<div class="mi"><div class="ml-av" style="overflow:hidden"><img src="'+g.url+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px" onerror="this.src=\x27\x27"></div><div class="ml-info"><div class="ml-name">'+g.cap+'</div><div class="ml-sub">'+(g.big?'Full Width':'Normal')+'</div></div><button class="edit-btn" onclick="openEditGallery('+g.id+')">\u270f️</button><button class="del-btn" onclick="delGallery('+g.id+')">&#128465;</button></div>';}).join('');}
 async function delGallery(id){if(!confirm('Delete this photo?'))return;toast('Deleting...','inf');await sbDelete('gallery',id);G=G.filter(function(g){return g.id!==id;});renderGallery();rML_G();toast('Photo deleted','inf');}
 function closeModal(id){var m=$$(id);if(m)m.classList.remove('open');}
 function mkAv(src,fb){return src?'<img src="'+src+'" style="width:100%;height:100%;object-fit:cover;border-radius:7px" onerror="this.outerHTML=\''+fb+'\'">':fb;}
@@ -2621,4 +2621,3 @@ loadAllData();
 </div>
 </body>
 </html>
-
