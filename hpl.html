@@ -20,7 +20,7 @@
   --surface:rgba(255,255,255,.045);--surface2:rgba(255,255,255,.07);
   --border:rgba(255,215,0,.12);--border2:rgba(255,215,0,.22);
   --text:#FFFFFF;--text2:rgba(255,255,255,.72);--text3:rgba(255,255,255,.42);
-  --topH:60px;--botH:68px;--sideW:240px;--tickH:28px;
+  --topH:60px;--botH:68px;--sideW:240px;--tickH:28px;--totalH:calc(var(--topH) + var(--tickH));
   --radius:14px;--radius2:20px;--radius3:28px;
 }
 html{scroll-behavior:smooth}
@@ -145,11 +145,11 @@ img{display:block;max-width:100%}
   .mob-ticker-bar{display:flex;}
   /* Hide ticker from topbar on mobile */
   .tb-ticker{display:none!important;}
-  /* Push layout down extra for ticker bar */
-  #layout{padding-top:calc(var(--topH) + var(--tickH));}
-  /* Push bottom nav label for ticker */
-  .botnav{top:auto;}
-  /* Sidebar sticky top adjust */
+  /* Push ALL content down — topbar + ticker bar */
+  #layout{padding-top:var(--totalH);}
+  /* Hamburger সবসময় ডানে */
+  .tb-hamburger{margin-left:auto;margin-right:14px;}
+  /* Settings hidden */
 }
 @media(min-width:900px){
   /* PC: show ticker in topbar, hide mobile bar */
@@ -186,7 +186,7 @@ img{display:block;max-width:100%}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .25s ease}
 .pi{padding:clamp(16px,2.5vw,32px) clamp(14px,2.5vw,32px) clamp(28px,5vw,52px);max-width:1100px;margin:0 auto}
-@media(max-width:899px){.pi{padding-bottom:calc(var(--botH) + env(safe-area-inset-bottom,0px) + 28px)}}
+@media(max-width:899px){.pi{padding-bottom:calc(var(--botH) + env(safe-area-inset-bottom,0px) + 28px)}.site-footer{margin-bottom:calc(var(--botH) + env(safe-area-inset-bottom,0px))}.cr-badge{bottom:calc(var(--botH) + env(safe-area-inset-bottom,0px) + 8px)}}
 
 /* ─── BOTTOM NAV ─── */
 .botnav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(8,9,15,.97);backdrop-filter:blur(24px);border-top:1px solid rgba(255,255,255,.07);display:flex;overflow:hidden;padding-bottom:env(safe-area-inset-bottom,0px);height:calc(var(--botH) + env(safe-area-inset-bottom,0px))}
@@ -723,7 +723,6 @@ img{display:block;max-width:100%}
   .tb-adminbtn{padding:6px 10px;font-size:.55rem;letter-spacing:1px;margin-right:8px}
 }
 @media(max-width:400px){
-  .tb-settingsbtn{display:none!important;}
   .tb-names .n2{display:none}
   .ticker-lbl{padding:2px 5px;font-size:.46rem;letter-spacing:1px}
 }
