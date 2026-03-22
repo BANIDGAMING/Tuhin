@@ -2096,7 +2096,10 @@ function renderSchedule(){
   var filt=M.filter(function(m){
     if(_sf==='today')return m.status==='today'||m.date===todayISO;
     if(_sf==='upcoming')return m.status==='upcoming';
-    if(_sf==='done')return m.status==='done';
+    if(_sf==='done'){
+      var tISO=getBDDateISO(0);
+      return m.status==='done'||(m.status==='upcoming'&&m.date&&m.date<tISO);
+    }
     return true;
   });
   if(!filt.length){el.innerHTML='<div class="empty-box"><div class="eb-ico">📅</div><div class="eb-txt">No matches found</div></div>';return;}
@@ -2600,7 +2603,13 @@ function renderPoints(){
 function loadResultTab(){
   var sel=$$('ar-match');if(!sel)return;
   // Show all done matches
-  var done=M.filter(function(m){return m.status==='done';});
+  // status='done' + past date match (auto-ended) সব দেখাও
+  var todayISO=getBDDateISO(0);
+  var done=M.filter(function(m){
+    if(m.status==='done')return true;
+    if((m.status==='upcoming'||m.status==='today')&&m.date&&m.date<todayISO)return true;
+    return false;
+  });
   sel.innerHTML='<option value="">-- Select a completed match --</option>';
   done.forEach(function(m){
     var tA=T.find(function(t){return t.id==m.teamA;})||{};
